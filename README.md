@@ -1,10 +1,12 @@
 # Teaching-HEIGVD-SRX-2020-Laboratoire-WiFi
 
+**Par Laurent Thoeny & Cassandre Wojciechowski**
+
 Vous aurez besoin de ``Wireshark`` et du logiciel ``aircrack-ng`` pour ce laboratoire. 
 
 Si vous utilisez une distribution Kali, tout est déjà pré-installé. Pour la version Windows du logiciel ``aircrack-ng``ou pour son installation sur d'autres distributions, référez-vous au
 [site web aircrack-ng](https://aircrack-ng.org) et/ou au gestionnaire de paquets de votre distribution.
- 
+
 # Identification d'un dispositif
 
 ## Introduction
@@ -40,24 +42,24 @@ Nous savons que la cible s’est hébergée à l’hôtel « Black Rain » et qu
 * Utiliser un filtre d’affichage Wireshark pour montrer uniquement les trames du type ``Probe Request`` 
 * Répondre aux questions suivantes :
 
-> **_Question :_** Quel filtre avez-vous utilisé
+> **_Question :_** Quel filtre avez-vous utilisé ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** wlan.fc.type_subtype==4
 
 ---
 > **_Question :_** Quel est l’adresse MAC de la cible ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** fc:f1:36:22:49:74
 
 ---
 > **_Question :_** Quel est le nom du constructeur de l’interface sans fils de la cible ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** Samsung Electronics Co.,Ltd
 
 ---
-> **_Question :_** Quel autres endroits la cible a-t-elle probablement visités ?
+> **_Question :_** Quels autres endroits la cible a-t-elle probablement visités ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** Migros, GVA airport, Fleur de Pains, Starbucks
 
 ---
 
@@ -71,7 +73,7 @@ Bien que trouvée faible et exploitée depuis de nombreuses années, cette méth
 
 ## Travail à réaliser
 
-Nous allons nous servir de l’outil ``aircrack-ng`` pour retrouver la clé de chiffrement WEP utilisée pour protéger un réseau dont nous avons une capture avec assez de trafic pour cracker la clé. Une fois la clé récupérée, nous l’utiliserons Wireshark pour rendre la capture lisible.
+Nous allons nous servir de l’outil ``aircrack-ng`` pour retrouver la clé de chiffrement WEP utilisée pour protéger un réseau dont nous avons une capture avec assez de trafic pour cracker la clé. Une fois la clé récupérée, nous utiliserons Wireshark pour rendre la capture lisible.
 
 ### Exercice :
 
@@ -103,17 +105,17 @@ Maintenant que vous avez la clé WEP, configurez la dans Wireshark afin de déch
 
 > **_Question :_** Combien de temps avez-vous attendu pour obtenir la clé WEP ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** Une fraction de seconde
 
 ---
 > **_Montrer une capture d'écran de l'obtention de la clé WEP_**
 > 
-> **_Capture ici_** 
+> ![](./images/cle_wep.JPG)
 
 ---
 > **_Question :_** Arrivez-vous à récupérer les informations d’identification (credentials) de l’authentification basique http contenue dans la capture ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** admin : admin
 
 ---
 
@@ -139,8 +141,14 @@ Nous utiliserons Wireshark pour trouver l’authentification WPA contenue dans l
 * Analyser les messages du 4-way handshake. En particulier, essayer de trouver les chiffres aléatoires (Nonces) échangés entre le client et l’AP.
 
 > **_Fournir une capture d'écran des chiffres aléatoires_**
-> 
-> **_Capture ici_** 
+>
+> ![](./images/wpa_nonce_1.JPG)
+>
+> ![](./images/wpa_nonce_2.JPG)
+>
+> ![](./images/wpa_nonce_3.JPG)
+>
+> ![](./images/wpa_nonce_4.JPG)
 
 ---
 
@@ -151,7 +159,7 @@ Nous allons nous servir de l’outil aircrack-ng et d’un dictionnaire pour ret
 
 * Copier [le dictionnaire](files/french_dico.txt) sur votre machine locale 
 * Utilisez aircrack-ng en ligne de commandes pour cracker la passphrase du réseau WPA avec le même [fichier de capture chiffrée avec WPA](files/coursWLAN-WPA.cap) que vous avez déjà copié.
- 
+
 ```
 aircrack-ng <nom-du-fichier-capture> -w <nom-du-dictionnaire>
 ```
@@ -162,22 +170,21 @@ aircrack-ng <nom-du-fichier-capture> -w <nom-du-dictionnaire>
 
 > **_Question :_** Combien de temps avez-vous attendu pour obtenir la passphrase WPA ?
 > 
-> **_Réponse :_** 
+> **_Réponse :_** ~15 secondes
 
 ---
 > **_Montrer une capture d'écran de l'obtention de la passphrase WPA_**
 > 
-> **_Capture ici_** 
+>  ![](./images/passphrase_wpa.JPG)
 
 ---
 > **_Question :_** Lors de la capture, la cible a fait un « ping » sur un serveur. Arrivez-vous à dire de quel serveur il s’agit ?
 
-> 
 > **_Réponse :_** 
 > 
-> Adresse IP du serveur : ?
->
-> Nom de Domaine : ?
+> Adresse IP du serveur : 31.13.64.35
+> 
+>Nom de Domaine : facebook.com
 
 
 
@@ -188,12 +195,13 @@ Nous avons enlevé une seule trame (choisie stratégiquement) du fichier de capt
 * Répondre aux questions suivantes :
 
 > **_Question :_** Est-ce que vous arrivez à refaire l'exercice ? Pourquoi ou pourquoi pas ?
-> 
-> **_Réponse :_** 
+>
+> **_Réponse :_** Non, nous n'arrivons pas à refaire l'exercice avec ce nouveau fichier car aircrack-ng ne trouve pas de réseau.
+>
+> ![](./images/aircrack_fail.JPG)
 
 ---
 > **_Question :_** Sur la base de votre réponse précédente, arrivez-vous à déduire quelle trame a été effacée ?
 
-> 
-> **_Réponse :_** 
-> 
+> **_Réponse :_** C'est la trame permettant l'établissement de la connexion qui a été effacée (handshake).
+
